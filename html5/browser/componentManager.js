@@ -316,9 +316,16 @@ ComponentManager.prototype = {
     if (component && component.node) {
       const sender = this.weexInstance.sender
       const listener = function (e) {
+        // do stop bubbling.
+        // do not prevent default, otherwise the touchstart
+        // event will no longer trigger a click event
+        if (e._alreadyTriggered) {
+          return
+        }
+        e._alreadyTriggered = true
         const evt = utils.extend({}, e)
         evt.target = component.data
-        sender.fireEvent(ref, type, func, evt)
+        sender.fireEvent(ref, type, func || {}, evt)
       }
       component.node.addEventListener(type, listener, false, false)
       let listeners = component._listeners
