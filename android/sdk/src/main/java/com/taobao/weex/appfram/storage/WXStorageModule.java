@@ -209,17 +209,13 @@ import android.text.TextUtils;
 
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.bridge.JSCallback;
-import com.taobao.weex.common.WXModule;
 import com.taobao.weex.common.WXModuleAnno;
 
 import java.util.Map;
 
-/**
- * Created by rowandjj(chuyi)<br/>
- */
-public class WXStorageModule extends WXModule implements IWXStorage {
+public class WXStorageModule extends WXSDKEngine.DestroyableModule implements IWXStorage {
 
-    private IWXStorageAdapter mStorageAdapter;
+    IWXStorageAdapter mStorageAdapter;
 
     private IWXStorageAdapter ability() {
         if (mStorageAdapter != null) {
@@ -335,5 +331,35 @@ public class WXStorageModule extends WXModule implements IWXStorage {
                 }
             }
         });
+    }
+
+    @Override
+    public void setItemPersistent(String key, String value, @Nullable final JSCallback callback) {
+        if (TextUtils.isEmpty(key) || TextUtils.isEmpty(value)) {
+            StorageResultHandler.handleInvalidParam(callback);
+            return;
+        }
+
+        IWXStorageAdapter adapter = ability();
+        if (adapter == null) {
+            StorageResultHandler.handleNoHandlerError(callback);
+            return;
+        }
+        adapter.setItemPersistent(key, value, new IWXStorageAdapter.OnResultReceivedListener() {
+            @Override
+            public void onReceived(Map<String, Object> data) {
+                if(callback != null){
+                    callback.invoke(data);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void destroy() {
+        IWXStorageAdapter adapter = ability();
+        if (adapter != null) {
+            adapter.close();
+        }
     }
 }

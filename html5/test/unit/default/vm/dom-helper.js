@@ -2,6 +2,7 @@ import chai from 'chai'
 const { expect } = chai
 
 global.callNative = function () {}
+global.callAddElement = function () {}
 
 import {
   createElement,
@@ -10,15 +11,16 @@ import {
   attachTarget,
   moveTarget,
   removeTarget
-} from '../../../../default/vm/dom-helper'
-import { Document } from '../../../../vdom'
+} from '../../../../frameworks/legacy/vm/dom-helper'
+import { Document } from '../../../../runtime/vdom'
+import Listener from '../../../../runtime/listener'
 
 describe('help create body', () => {
   let vm
 
   beforeEach(() => {
     vm = {
-      _app: { doc: new Document('foo') }
+      _app: { doc: new Document('foo', null, null, Listener) }
     }
   })
 
@@ -41,7 +43,7 @@ describe('help create element', () => {
 
   beforeEach(() => {
     vm = {
-      _app: { doc: new Document('foo') }
+      _app: { doc: new Document('foo', null, null, Listener) }
     }
   })
 
@@ -63,7 +65,7 @@ describe('help create block', () => {
 
   beforeEach(() => {
     vm = {
-      _app: { doc: new Document('foo') }
+      _app: { doc: new Document('foo', null, null, Listener) }
     }
   })
 
@@ -92,7 +94,7 @@ describe('help attach target', () => {
 
   beforeEach(() => {
     vm = {
-      _app: { doc: new Document('foo') }
+      _app: { doc: new Document('foo', null, null, Listener) }
     }
   })
 
@@ -193,7 +195,7 @@ describe('help move target', () => {
 
   beforeEach(() => {
     vm = {
-      _app: { doc: new Document('foo') }
+      _app: { doc: new Document('foo', null, null, Listener) }
     }
     parent = createElement(vm, 'r')
     dest = createBlock(vm, parent)
@@ -317,7 +319,7 @@ describe('help remove target', () => {
 
   beforeEach(() => {
     vm = {
-      _app: { doc: new Document('foo') }
+      _app: { doc: new Document('foo', null, null, Listener) }
     }
   })
 

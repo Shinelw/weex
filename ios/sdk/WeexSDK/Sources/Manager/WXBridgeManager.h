@@ -9,8 +9,14 @@
 #import <Foundation/Foundation.h>
 
 @class WXBridgeMethod;
+@class WXSDKInstance;
 
 @interface WXBridgeManager : NSObject
+
+/**
+ *  return instance at the top of the stack.
+ **/
+@property (nonatomic, weak, readonly) WXSDKInstance *topInstance;
 
 /**
  *  Create Instance Method
@@ -23,6 +29,11 @@
               template:(NSString *)temp
                options:(NSDictionary *)options
                   data:(id)data;
+
+/**
+ * @abstract return currentInstanceId
+ **/
+- (NSArray *)getInstanceIdStack;
 
 /**
  *  Destroy Instance Method
